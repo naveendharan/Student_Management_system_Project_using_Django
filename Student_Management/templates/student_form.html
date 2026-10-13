@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {% if edit_mode %}
+            Edit Student
+        {% else %}
+            Add Student
+        {% endif %}
+        | Student Management System
+    </title>
+
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #1f2937;
+        }
+
+
+        /* TOP BAR */
+
+        .topbar {
+            background: #1e293b;
+            color: white;
+
+            padding: 18px 40px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+
+        .topbar h2 {
+            font-size: 22px;
+        }
+
+
+        .topbar span {
+            font-size: 14px;
+            color: #cbd5e1;
+        }
+
+
+        /* CONTAINER */
+
+        .container {
+            max-width: 1100px;
+
+            margin: 0 auto;
+
+            padding: 30px;
+        }
+
+
+        /* BREADCRUMB */
+
+        .breadcrumb {
+            color: #64748b;
+
+            font-size: 14px;
+
+            margin-bottom: 20px;
+        }
+
+
+        /* PAGE HEADER */
+
+        .page-header {
+            margin-bottom: 25px;
+        }
+
+
+        .page-header h1 {
+            font-size: 30px;
+
+            margin-bottom: 6px;
+        }
+
+
+        .page-header p {
+            color: #64748b;
+
+            font-size: 14px;
+        }
+
+
+        /* CARD */
+
+        .card {
+            background: white;
+
+            border-radius: 10px;
+
+            padding: 30px;
+
+            box-shadow:
+                0 2px 10px rgba(0, 0, 0, 0.06);
+        }
+
+
+        /* SECTION */
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+
+        .form-section:last-child {
+            margin-bottom: 0;
+        }
+
+
+        .section-title {
+            font-size: 18px;
+
+            font-weight: bold;
+
+            color: #1e293b;
+
+            padding-bottom: 12px;
+
+            margin-bottom: 20px;
+
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+
+        /* FORM GRID */
+
+        .form-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+
+            gap: 20px;
+        }
+
+
+        .form-group {
+            display: flex;
+
+            flex-direction: column;
+        }
+
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+
+        /* LABEL */
+
+        label {
+            font-size: 14px;
+
+            font-weight: bold;
+
+            color: #334155;
+
+            margin-bottom: 7px;
+        }
+
+
+        .required {
+            color: #dc2626;
+        }
+
+
+        /* INPUTS */
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+
+            padding: 11px 12px;
+
+            border: 1px solid #cbd5e1;
+
+            border-radius: 6px;
+
+            font-family: Arial, sans-serif;
+
+            font-size: 14px;
+
+            outline: none;
+
+            background: white;
+        }
+
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #2563eb;
+
+            box-shadow:
+                0 0 0 2px rgba(37, 99, 235, 0.1);
+        }
+
+
+        textarea {
+            resize: vertical;
+        }
+
+
+        /* ERRORS */
+
+        .error {
+            color: #dc2626;
+
+            font-size: 12px;
+
+            margin-top: 5px;
+        }
+
+
+        .form-error {
+            background: #fee2e2;
+
+            color: #991b1b;
+
+            border: 1px solid #fecaca;
+
+            border-radius: 6px;
+
+            padding: 12px;
+
+            margin-bottom: 20px;
+
+            font-size: 14px;
+        }
+
+
+        /* BUTTON AREA */
+
+        .button-area {
+            display: flex;
+
+            justify-content: flex-end;
+
+            align-items: center;
+
+            gap: 10px;
+
+            padding-top: 25px;
+
+            margin-top: 10px;
+
+            border-top: 1px solid #e2e8f0;
+        }
+
+
+        /* BUTTONS */
+
+        .btn {
+            border: none;
+
+            text-decoration: none;
+
+            padding: 11px 20px;
+
+            border-radius: 6px;
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            display: inline-block;
+        }
+
+
+        .btn-secondary {
+            background: #e2e8f0;
+
+            color: #334155;
+        }
+
+
+        .btn-secondary:hover {
+            background: #cbd5e1;
+        }
+
+
+        .btn-primary {
+            background: #2563eb;
+
+            color: white;
+        }
+
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+        }
+
+
+        /* RESPONSIVE */
+
+        @media (max-width: 768px) {
+
+            .topbar {
+                padding: 16px 20px;
+            }
+
+
+            .topbar span {
+                display: none;
+            }
+
+
+            .container {
+                padding: 20px;
+            }
+
+
+            .card {
+                padding: 20px;
+            }
+
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+
+            .full-width {
+                grid-column: auto;
+            }
+
+
+            .button-area {
+                flex-direction: column-reverse;
+
+                align-items: stretch;
+            }
+
+
+            .btn {
+                text-align: center;
+
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- TOP BAR -->
+
+    <div class="topbar">
+
+        <h2>
+            Student Management
+        </h2>
+
+        <span>
+            Administration Portal
+        </span>
+
+    </div>
+
+
+    <!-- MAIN CONTAINER -->
+
+    <div class="container">
+
+
+        <!-- BREADCRUMB -->
+
+        <div class="breadcrumb">
+
+            Home /
+
+            {% if edit_mode %}
+                Edit Student
+            {% else %}
+                Add Student
+            {% endif %}
+
+        </div>
+
+
+        <!-- PAGE HEADER -->
+
+        <div class="page-header">
+
+            {% if edit_mode %}
+
+                <h1>
+                    Edit Student
+                </h1>
+
+                <p>
+                    Update the student's information below.
+                </p>
+
+            {% else %}
+
+                <h1>
+                    Add Student
+                </h1>
+
+                <p>
+                    Enter the student's information below.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- FORM CARD -->
+
+        <div class="card">
+
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+
+                <!-- GENERAL FORM ERRORS -->
+
+                {% if form.non_field_errors %}
+
+                    <div class="form-error">
+
+                        {% for error in form.non_field_errors %}
+
+                            {{ error }}
+
+                        {% endfor %}
+
+                    </div>
+
+                {% endif %}
+
+
+                <!-- PERSONAL INFORMATION -->
+
+                <div class="form-section">
+
+
+                    <div class="section-title">
+                        Personal Information
+                    </div>
+
+
+                    <div class="form-grid">
+
+
+                        <!-- STUDENT ID -->
+
+                        <div class="form-group">
+
+                            <label for="{{ form.student_id.id_for_label }}">
+
+                                Student ID
+
+                                <span class="required">
+                                    *
+                                </span>
+
+                            </label>
+
+
+                            {{ form.student_id }}
+
+
+                            {% for error in form.student_id.errors %}
+
+                                <div class="error">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+                        <!-- FIRST NAME -->
+
+                        <div class="form-group">
+
+                            <label for="{{ form.first_name.id_for_label }}">
+
+                                First Name
+
+                                <span class="required">
+                                    *
+                                </span>
+
+                            </label>
+
+
+                            {{ form.first_name }}
+
+
+                            {% for error in form.first_name.errors %}
+
+                                <div class="error">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+                        <!-- LAST NAME -->
+
+                        <div class="form-group">
+
+                            <label for="{{ form.last_name.id_for_label }}">
+
+                                Last Name
+
+                                <span class="required">
+                                    *
+                                </span>
+
+                            </label>
+
+
+                            {{ form.last_name }}
+
+
+                            {% for error in form.last_name.errors %}
+
+                                <div class="error">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+                        <!-- DOB -->
+
+                        <div class="form-group">
+
+                            <label for="{{ form.dob.id_for_label }}">
+                                Date of Birth
+                            </label>
+
+
+                            {{ form.dob }}
+
+
+                            {% for error in form.dob.errors %}
+
+                                <div class="error">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+                        <!-- GENDER -->
+
+                        <div class="form-group">
+
+                            <label for="{{ form.gender.id_for_label }}">
+                                Gender
+                            </label>
+
+
+                            {{ form.gender }}
+
+
+                            {% for error in form.gender.errors %}
+
+                                <div class="error">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+                <!-- ACADEMIC INFORMATION -->
+
+                <div class="form-section">
+
+
+                    <div class="section-title">
+                        Academic Information
+                    </div>
+
+
+                    <div class="form-grid">
+
+
+                        <!-- DEPARTMENT -->
+
+                        <div class="form-group">
+
+                            <label for="{{ form.department.id_for_label }}">
+
+                                Department
+
+                                <span class="required">
+                                    *
+                                </span>
+
+                            </label>
+
+
+                            {{ form.department }}
+
+
+                            {% for error in form.department.errors %}
+
+                                <div class="error">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+                        <!-- DEGREE -->
+
+                        <div class="form-group">
+
+                            <label for="{{ form.degree.id_for_label }}">
+
+                                Degree
+
+                                <span class="required">
+                                    *
+                                </span>
+
+                            </label>
+
+
+                            {{ form.degree }}
+
+
+                            {% for error in form.degree.errors %}
+
+                                <div class="error">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+                        <!-- ADMISSION YEAR -->
+
+                        <div class="form-group">
+
+                            <label for="{{ form.admission_year.id_for_label }}">
+                                Admission Year
+                            </label>
+
+
+                            {{ form.admission_year }}
+
+
+                            {% for error in form.admission_year.errors %}
+
+                                <div class="error">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+                        <!-- SEMESTER -->
+
+                        <div class="form-group">
+
+                            <label for="{{ form.semester.id_for_label }}">
+                                Semester
+                            </label>
+
+
+                            {{ form.semester }}
+
+
+                            {% for error in form.semester.errors %}
+
+                                <div class="error">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+                        <!-- SECTION -->
+
+                        <div class="form-group">
+
+                            <label for="{{ form.section.id_for_label }}">
+                                Section
+                            </label>
+
+
+                            {{ form.section }}
+
+
+                            {% for error in form.section.errors %}
+
+                                <div class="error">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+                        <!-- ENROLLMENT DATE -->
+
+                        <div class="form-group">
+
+                            <label for="{{ form.enrollment_date.id_for_label }}">
+                                Enrollment Date
+                            </label>
+
+
+                            {{ form.enrollment_date }}
+
+
+                            {% for error in form.enrollment_date.errors %}
+
+                                <div class="error">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+                        <!-- STATUS -->
+
+                        <div class="form-group">
+
+                            <label for="{{ form.status.id_for_label }}">
+                                Status
+                            </label>
+
+
+                            {{ form.status }}
+
+
+                            {% for error in form.status.errors %}
+
+                                <div class="error">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+                <!-- CONTACT INFORMATION -->
+
+                <div class="form-section">
+
+
+                    <div class="section-title">
+                        Contact Information
+                    </div>
+
+
+                    <div class="form-grid">
+
+
+                        <!-- EMAIL -->
+
+                        <div class="form-group">
+
+                            <label for="{{ form.email.id_for_label }}">
+                                Email
+                            </label>
+
+
+                            {{ form.email }}
+
+
+                            {% for error in form.email.errors %}
+
+                                <div class="error">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+                        <!-- PHONE -->
+
+                        <div class="form-group">
+
+                            <label for="{{ form.phone.id_for_label }}">
+                                Phone Number
+                            </label>
+
+
+                            {{ form.phone }}
+
+
+                            {% for error in form.phone.errors %}
+
+                                <div class="error">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+                        <!-- ADDRESS -->
+
+                        <div class="form-group full-width">
+
+                            <label for="{{ form.address.id_for_label }}">
+                                Address
+                            </label>
+
+
+                            {{ form.address }}
+
+
+                            {% for error in form.address.errors %}
+
+                                <div class="error">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+                        <!-- CITY -->
+
+                        <div class="form-group">
+
+                            <label for="{{ form.city.id_for_label }}">
+                                City
+                            </label>
+
+
+                            {{ form.city }}
+
+
+                            {% for error in form.city.errors %}
+
+                                <div class="error">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+                        <!-- STATE -->
+
+                        <div class="form-group">
+
+                            <label for="{{ form.state.id_for_label }}">
+                                State
+                            </label>
+
+
+                            {{ form.state }}
+
+
+                            {% for error in form.state.errors %}
+
+                                <div class="error">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+                        <!-- PINCODE -->
+
+                        <div class="form-group">
+
+                            <label for="{{ form.pincode.id_for_label }}">
+                                Pincode
+                            </label>
+
+
+                            {{ form.pincode }}
+
+
+                            {% for error in form.pincode.errors %}
+
+                                <div class="error">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+                <!-- BUTTONS -->
+
+                <div class="button-area">
+
+
+                    <!-- BACK -->
+
+                    <a
+                        href="{% url 'student_list' %}"
+                        class="btn btn-secondary"
+                    >
+                        Back to Students
+                    </a>
+
+
+                    <!-- CLEAR -->
+
+                    <button
+                        type="reset"
+                        class="btn btn-secondary"
+                    >
+                        Clear
+                    </button>
+
+
+                    <!-- SAVE / UPDATE -->
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                    >
+
+                        {% if edit_mode %}
+                            Update Student
+                        {% else %}
+                            Save Student
+                        {% endif %}
+
+                    </button>
+
+
+                </div>
+
+
+            </form>
+
+
+        </div>
+
+
+    </div>
+
+
+</body>
+
+</html>
